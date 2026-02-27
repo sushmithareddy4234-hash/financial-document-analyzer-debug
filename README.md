@@ -19,7 +19,7 @@ The system is now fully functional and stable.
 
 ---
 
-# 2. Bugs Identified and Fixes
+## 2. Bugs Identified and Fixes
 
 
  Bug 1: Incorrect CrewAI Import
