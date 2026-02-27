@@ -1,107 +1,277 @@
-# Financial Document Analyzer – Debug Assignment
+# Financial Document Analyzer – Debug Assignment Solution
 
-## Project Overview
+---
 
-This project is an AI-powered financial document analysis system built using CrewAI and FastAPI.
+## 1. Introduction
 
-The system processes uploaded financial PDF documents and generates structured financial insights including:
+This project is a **Financial Document Analyzer** built using **FastAPI and CrewAI**.  
+The system allows users to upload financial PDF documents and receive structured financial analysis strictly based on the document content.
 
-- Financial highlights  
-- Revenue and profitability analysis  
-- Risk assessment  
-- Investment outlook  
-- Document limitations  
+The original repository contained multiple architectural and configuration issues. These were identified, debugged, and resolved to make the system fully functional.
 
-The application uses background processing and database persistence to handle asynchronous analysis jobs efficiently.
+### Enhancements Implemented
 
+- Background task processing (queue-like behavior)
+- SQLite database integration for storing analysis results
+- Persistent file-based output storage
 
-## Tech Stack
+The system is now fully functional and stable.
 
-- FastAPI (API framework)
-- CrewAI (Agent orchestration)
-- Groq LLM (llama-3.1-8b-instant)
-- SQLAlchemy (SQLite database)
-- LangChain PDF Loader
-- Background task processing (non-blocking queue simulation)
+---
 
+# 2. Bugs Identified and Fixes
 
-## Setup Instructions
+## Bug 1: Incorrect CrewAI Import
 
-### 1. Create Virtual Environment
-
-python -m venv venv  
-venv\Scripts\activate  
+### Issue  
+Incorrect import caused:
 
 
-### 2. Install Dependencies
-
-pip install -r requirements.txt  
+ImportError: cannot import name 'Agent'
 
 
-### 3. Configure Environment Variables
+### Fix
 
-Create a `.env` file in the root directory:
+```python
+from crewai import Agent
+Bug 2: LLM Provider Not Configured
+Issue
 
-GROQ_API_KEY=your_groq_api_key_here  
+LiteLLM error:
 
+LLM Provider NOT provided
 
-## Running the Application
+Model was passed without specifying provider.
 
-python -m uvicorn main:app --reload  
+Fix
+from crewai import LLM
+import os
 
-Server will run at:
+llm = LLM(
+    model="groq/llama-3.1-8b-instant",
+    api_key=os.getenv("GROQ_API_KEY")
+)
+Bug 3: Deprecated / Invalid Model Names
+Issue
 
-http://127.0.0.1:8000  
+Models like:
 
+llama-3.3-70b
 
-## API Endpoints
+llama-3.3-70b-versatile
 
-### POST /analyze
+Were deprecated or inaccessible.
 
-Upload a PDF file for financial analysis.
+Fix
 
-Form Data:
-- file: PDF document
-- query: Optional analysis instruction
+Replaced with valid Groq model:
+
+groq/llama-3.1-8b-instant
+Bug 4: PDF Content Not Passed to Agent
+Issue
+
+Uploaded PDF content was not properly extracted and passed to Crew task.
+
+Fix
+from langchain_community.document_loaders import PyPDFLoader
+
+loader = PyPDFLoader(file_path)
+docs = loader.load()
+full_text = "\n".join([doc.page_content for doc in docs])
+document_content = full_text[:3000]
+
+This ensures:
+
+Proper document extraction
+
+Token control for faster execution
+
+Bug 5: Blocking API Execution
+Issue
+
+The /analyze endpoint blocked execution until analysis completed.
+
+Fix
+
+Implemented FastAPI BackgroundTasks:
+
+background_tasks.add_task(
+    process_document,
+    job_id,
+    query.strip(),
+    file_path
+)
+
+Now:
+
+/analyze returns immediately
+
+Processing runs in background
+
+/result/{job_id} retrieves result
+
+Bug 6: No Result Persistence
+Issue
+
+Results were stored only in memory.
+
+Fix
+
+Implemented SQLite database integration using SQLAlchemy.
+
+class JobResult(Base):
+    __tablename__ = "job_results"
+
+    job_id = Column(String, primary_key=True, index=True)
+    status = Column(String)
+    analysis = Column(Text)
+
+Results are now:
+
+Stored in results.db
+
+Saved in outputs/{job_id}.txt
+
+3. Setup Instructions (Step-by-Step)
+Step 1: Clone the Repository
+git clone <your-repository-link>
+cd financial-document-analyzer-debug
+Step 2: Create Virtual Environment (Important)
+On Windows
+python -m venv venv
+venv\Scripts\activate
+On Mac/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+You should now see (venv) in your terminal.
+
+Step 3: Install Dependencies
+pip install -r requirements.txt
+Step 4: Configure Environment Variables
+
+Create a .env file in the project root:
+
+GROQ_API_KEY=your_actual_groq_api_key
+Step 5: Run the Application
+uvicorn main:app --reload
+
+Server runs at:
+
+http://127.0.0.1:8000
+4. How to Use the System
+Step 1: Open Swagger UI
+
+Go to:
+
+http://127.0.0.1:8000/docs
+Step 2: Upload Financial PDF (POST /analyze)
+
+Expand POST /analyze
+
+Click Try it out
+
+Upload a financial PDF
+
+Click Execute
 
 Response:
-- job_id (used to fetch results)
 
+{
+  "status": "accepted",
+  "job_id": "generated-uuid"
+}
 
-### GET /result/{job_id}
+Copy the job_id.
 
-Fetch analysis result for a submitted job.
+Step 3: Fetch Result (GET /result/{job_id})
 
+Expand GET /result/{job_id}
 
-## Database
+Paste the job_id
 
-Results are stored in:
+Click Execute
 
-results.db  
+Possible Responses
+Processing
+{
+  "status": "processing"
+}
+Completed
+{
+  "status": "completed",
+  "analysis": "...",
+  "saved_to": "outputs/{job_id}.txt"
+}
+Failed
+{
+  "status": "failed",
+  "error": "error details"
+}
+5. Database Implementation
 
-Each job stores:
-- job_id
-- status
-- analysis output
+SQLite database file: results.db
 
+Automatically created on first run
 
-## Key Improvements Made
+Stores:
 
-- Fixed CrewAI agent initialization errors  
-- Corrected LLM provider configuration  
-- Resolved PDF loading bugs  
-- Implemented background task processing  
-- Added SQLite database persistence  
-- Cleaned inefficient prompts  
-- Limited token size for performance optimization  
-- Added proper error handling  
+job_id
 
+status
 
-## Supported File Type
+analysis result
 
-- PDF only
+This ensures persistence even if the server restarts.
 
+6. API Documentation
+POST /analyze
 
-## Project Status
+Uploads financial PDF and starts background processing.
 
-Fully functional and tested.
+Request
+
+file (PDF)
+
+query (optional)
+
+Response
+{
+  "status": "accepted",
+  "job_id": "uuid"
+}
+GET /result/{job_id}
+
+Fetch analysis result.
+
+Returns:
+
+processing
+
+completed
+
+failed
+
+7. Bonus Implementations Completed
+
+✔ Background task queue model
+✔ SQLite database integration
+✔ Output file persistence
+✔ Proper LLM provider configuration
+✔ Structured API documentation
+
+Final Outcome
+
+This solution demonstrates:
+
+Debugging capability
+
+Proper LLM integration (Groq + CrewAI)
+
+API design
+
+Background processing
+
+Database persistence
+
+Clean architecture
