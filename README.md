@@ -21,25 +21,24 @@ The system is now fully functional and stable.
 
 # 2. Bugs Identified and Fixes
 
-```python
 
 ## Bug 1: Incorrect CrewAI Import
 
 ### Issue  
 Incorrect import caused:
 
-
+```python
 ImportError: cannot import name 'Agent'
-
 
 ### Fix
 
 from crewai import Agent
+```
 Bug 2: LLM Provider Not Configured
 Issue
 
 LiteLLM error:
-
+```python
 LLM Provider NOT provided
 
 Model was passed without specifying provider.
@@ -52,6 +51,7 @@ llm = LLM(
     model="groq/llama-3.1-8b-instant",
     api_key=os.getenv("GROQ_API_KEY")
 )
+```
 Bug 3: Deprecated / Invalid Model Names
 Issue
 
@@ -60,7 +60,7 @@ Models like:
 llama-3.3-70b
 
 llama-3.3-70b-versatile
-
+```python
 Were deprecated or inaccessible.
 
 Fix
@@ -68,11 +68,12 @@ Fix
 Replaced with valid Groq model:
 
 groq/llama-3.1-8b-instant
+```
 Bug 4: PDF Content Not Passed to Agent
 Issue
 
 Uploaded PDF content was not properly extracted and passed to Crew task.
-
+```python
 Fix
 from langchain_community.document_loaders import PyPDFLoader
 
@@ -86,12 +87,12 @@ This ensures:
 Proper document extraction
 
 Token control for faster execution
-
+```
 Bug 5: Blocking API Execution
 Issue
 
 The /analyze endpoint blocked execution until analysis completed.
-
+```python
 Fix
 
 Implemented FastAPI BackgroundTasks:
@@ -110,12 +111,12 @@ Now:
 Processing runs in background
 
 /result/{job_id} retrieves result
-
+```
 Bug 6: No Result Persistence
 Issue
 
 Results were stored only in memory.
-
+```python
 Fix
 
 Implemented SQLite database integration using SQLAlchemy.
@@ -132,40 +133,53 @@ Results are now:
 Stored in results.db
 
 Saved in outputs/{job_id}.txt
-
+```
 3. Setup Instructions (Step-by-Step)
 Step 1: Clone the Repository
+```python
 git clone <your-repository-link>
 cd financial-document-analyzer-debug
+```
 Step 2: Create Virtual Environment (Important)
 On Windows
+```python
 python -m venv venv
 venv\Scripts\activate
+```
 On Mac/Linux
+```python
 python3 -m venv venv
 source venv/bin/activate
+```
 
-You should now see (venv) in your terminal.
+One should now see (venv) in the terminal.
 
 Step 3: Install Dependencies
+```python
 pip install -r requirements.txt
+```
 Step 4: Configure Environment Variables
 
 Create a .env file in the project root:
+```python
 
 GROQ_API_KEY=your_actual_groq_api_key
+```
 Step 5: Run the Application
+```python
 uvicorn main:app --reload
-
+```
 Server runs at:
-
+```python
 http://127.0.0.1:8000
+```
 4. How to Use the System
 Step 1: Open Swagger UI
 
 Go to:
-
+```python
 http://127.0.0.1:8000/docs
+```
 Step 2: Upload Financial PDF (POST /analyze)
 
 Expand POST /analyze
@@ -177,12 +191,12 @@ Upload a financial PDF
 Click Execute
 
 Response:
-
+```python
 {
   "status": "accepted",
   "job_id": "generated-uuid"
 }
-
+```
 Copy the job_id.
 
 Step 3: Fetch Result (GET /result/{job_id})
@@ -195,20 +209,26 @@ Click Execute
 
 Possible Responses
 Processing
+```python
 {
   "status": "processing"
 }
+```
 Completed
+```python
 {
   "status": "completed",
   "analysis": "...",
   "saved_to": "outputs/{job_id}.txt"
 }
+```
 Failed
+```python
 {
   "status": "failed",
   "error": "error details"
 }
+```
 5. Database Implementation
 
 SQLite database file: results.db
@@ -237,10 +257,12 @@ file (PDF)
 query (optional)
 
 Response
+```python
 {
   "status": "accepted",
   "job_id": "uuid"
 }
+```
 GET /result/{job_id}
 
 Fetch analysis result.
