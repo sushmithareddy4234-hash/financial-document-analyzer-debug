@@ -22,7 +22,7 @@ The system is now fully functional and stable.
 ## 2. Bugs Identified and Fixes
 
 
- Bug 1: Incorrect CrewAI Import
+ ### Bug 1: Incorrect CrewAI Import
 
 ### Issue  
 Incorrect import caused:
@@ -35,7 +35,7 @@ ImportError: cannot import name 'Agent'
 from crewai import Agent
 ```
 
-Bug 2: LLM Provider Not Configured
+### Bug 2: LLM Provider Not Configured
 
 ### Issue
 
@@ -56,7 +56,7 @@ llm = LLM(
 )
 ```
 
-Bug 3: Deprecated / Invalid Model Names
+### Bug 3: Deprecated / Invalid Model Names
 
 ### Issue
 
@@ -75,7 +75,7 @@ Replaced with valid Groq model:
 groq/llama-3.1-8b-instant
 ```
 
-Bug 4: PDF Content Not Passed to Agent
+### Bug 4: PDF Content Not Passed to Agent
 
 ### Issue
 
@@ -96,7 +96,7 @@ Proper document extraction
 
 Token control for faster execution
 
-Bug 5: Blocking API Execution
+### Bug 5: Blocking API Execution
 
 ### Issue
 
@@ -121,7 +121,7 @@ Processing runs in background
 
 /result/{job_id} retrieves result
 
-Bug 6: No Result Persistence
+### Bug 6: No Result Persistence
 
 ### Issue
 
