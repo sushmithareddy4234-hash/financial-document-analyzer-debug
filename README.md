@@ -139,6 +139,8 @@ Stored in results.db
 
 Saved in outputs/{job_id}.txt
 
+---
+
 3. Setup Instructions (Step-by-Step)
    
 Step 1: Clone the Repository
@@ -182,6 +184,9 @@ Server runs at:
 ```python
 http://127.0.0.1:8000
 ```
+
+--- 
+
 4. How to Use the System
    
 Step 1: Open Swagger UI
@@ -240,6 +245,10 @@ Failed
   "error": "error details"
 }
 ```
+
+--- 
+
+
 5. Database Implementation
 
 SQLite database file: results.db
@@ -255,6 +264,8 @@ status
 analysis result
 
 This ensures persistence even if the server restarts.
+
+---
 
 6. API Documentation
 POST /analyze
@@ -285,6 +296,8 @@ processing
 completed
 
 failed
+
+---
 
 7. Bonus Implementations Completed
 
