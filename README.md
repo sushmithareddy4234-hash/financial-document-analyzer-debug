@@ -21,6 +21,8 @@ The system is now fully functional and stable.
 
 # 2. Bugs Identified and Fixes
 
+```python
+
 ## Bug 1: Incorrect CrewAI Import
 
 ### Issue  
@@ -32,7 +34,6 @@ ImportError: cannot import name 'Agent'
 
 ### Fix
 
-```python
 from crewai import Agent
 Bug 2: LLM Provider Not Configured
 Issue
