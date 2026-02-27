@@ -36,7 +36,8 @@ from crewai import Agent
 ```
 
 Bug 2: LLM Provider Not Configured
-Issue
+
+###Issue
 
 LiteLLM error:
 
@@ -56,7 +57,8 @@ llm = LLM(
 ```
 
 Bug 3: Deprecated / Invalid Model Names
-Issue
+
+###Issue
 
 Models like:
 
@@ -74,7 +76,8 @@ groq/llama-3.1-8b-instant
 ```
 
 Bug 4: PDF Content Not Passed to Agent
-Issue
+
+###Issue
 
 Uploaded PDF content was not properly extracted and passed to Crew task.
 
@@ -94,7 +97,8 @@ Proper document extraction
 Token control for faster execution
 
 Bug 5: Blocking API Execution
-Issue
+
+###Issue
 
 The /analyze endpoint blocked execution until analysis completed.
 ```python
@@ -118,7 +122,8 @@ Processing runs in background
 /result/{job_id} retrieves result
 
 Bug 6: No Result Persistence
-Issue
+
+###Issue
 
 Results were stored only in memory.
 
@@ -141,7 +146,7 @@ Saved in outputs/{job_id}.txt
 
 ---
 
-3. Setup Instructions (Step-by-Step)
+##3. Setup Instructions (Step-by-Step)
    
 Step 1: Clone the Repository
 ```python
@@ -187,7 +192,7 @@ http://127.0.0.1:8000
 
 --- 
 
-4. How to Use the System
+##4. How to Use the System
    
 Step 1: Open Swagger UI
 
@@ -249,7 +254,7 @@ Failed
 --- 
 
 
-5. Database Implementation
+##5. Database Implementation
 
 SQLite database file: results.db
 
@@ -267,7 +272,7 @@ This ensures persistence even if the server restarts.
 
 ---
 
-6. API Documentation
+##6. API Documentation
 POST /analyze
 
 Uploads financial PDF and starts background processing.
@@ -299,7 +304,7 @@ failed
 
 ---
 
-7. Bonus Implementations Completed
+##7. Bonus Implementations Completed
 
  Background task queue model
  SQLite database integration
@@ -307,7 +312,7 @@ failed
  Proper LLM provider configuration
  Structured API documentation
 
-Final Outcome
+##Final Outcome
 
 This solution demonstrates:
 
