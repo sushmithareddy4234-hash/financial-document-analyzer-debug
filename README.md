@@ -22,15 +22,15 @@ The system is now fully functional and stable.
 # 2. Bugs Identified and Fixes
 
 
-## Bug 1: Incorrect CrewAI Import
+ Bug 1: Incorrect CrewAI Import
 
 ### Issue  
 Incorrect import caused:
 
-```python
-ImportError: cannot import name 'Agent'
 
-### Fix
+ImportError: cannot import name 'Agent'
+```python
+ Fix
 
 from crewai import Agent
 ```
@@ -38,12 +38,13 @@ Bug 2: LLM Provider Not Configured
 Issue
 
 LiteLLM error:
-```python
+
 LLM Provider NOT provided
 
 Model was passed without specifying provider.
 
 Fix
+```python
 from crewai import LLM
 import os
 
@@ -60,34 +61,35 @@ Models like:
 llama-3.3-70b
 
 llama-3.3-70b-versatile
-```python
+
 Were deprecated or inaccessible.
 
 Fix
 
 Replaced with valid Groq model:
-
+```python
 groq/llama-3.1-8b-instant
 ```
 Bug 4: PDF Content Not Passed to Agent
 Issue
 
 Uploaded PDF content was not properly extracted and passed to Crew task.
-```python
+
 Fix
+```python
 from langchain_community.document_loaders import PyPDFLoader
 
 loader = PyPDFLoader(file_path)
 docs = loader.load()
 full_text = "\n".join([doc.page_content for doc in docs])
 document_content = full_text[:3000]
-
+```
 This ensures:
 
 Proper document extraction
 
 Token control for faster execution
-```
+
 Bug 5: Blocking API Execution
 Issue
 
@@ -103,7 +105,7 @@ background_tasks.add_task(
     query.strip(),
     file_path
 )
-
+```
 Now:
 
 /analyze returns immediately
@@ -111,30 +113,31 @@ Now:
 Processing runs in background
 
 /result/{job_id} retrieves result
-```
+
 Bug 6: No Result Persistence
 Issue
 
 Results were stored only in memory.
-```python
+
 Fix
 
 Implemented SQLite database integration using SQLAlchemy.
-
+```python
 class JobResult(Base):
     __tablename__ = "job_results"
 
     job_id = Column(String, primary_key=True, index=True)
     status = Column(String)
     analysis = Column(Text)
-
+```
 Results are now:
 
 Stored in results.db
 
 Saved in outputs/{job_id}.txt
-```
+
 3. Setup Instructions (Step-by-Step)
+   
 Step 1: Clone the Repository
 ```python
 git clone <your-repository-link>
@@ -174,6 +177,7 @@ Server runs at:
 http://127.0.0.1:8000
 ```
 4. How to Use the System
+   
 Step 1: Open Swagger UI
 
 Go to:
