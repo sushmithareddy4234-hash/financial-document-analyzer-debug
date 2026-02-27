@@ -29,11 +29,12 @@ Incorrect import caused:
 
 
 ImportError: cannot import name 'Agent'
-```python
- Fix
 
+ Fix
+```python
 from crewai import Agent
 ```
+
 Bug 2: LLM Provider Not Configured
 Issue
 
@@ -53,6 +54,7 @@ llm = LLM(
     api_key=os.getenv("GROQ_API_KEY")
 )
 ```
+
 Bug 3: Deprecated / Invalid Model Names
 Issue
 
@@ -70,6 +72,7 @@ Replaced with valid Groq model:
 ```python
 groq/llama-3.1-8b-instant
 ```
+
 Bug 4: PDF Content Not Passed to Agent
 Issue
 
@@ -143,6 +146,7 @@ Step 1: Clone the Repository
 git clone <your-repository-link>
 cd financial-document-analyzer-debug
 ```
+
 Step 2: Create Virtual Environment (Important)
 On Windows
 ```python
@@ -161,6 +165,7 @@ Step 3: Install Dependencies
 ```python
 pip install -r requirements.txt
 ```
+
 Step 4: Configure Environment Variables
 
 Create a .env file in the project root:
@@ -168,6 +173,7 @@ Create a .env file in the project root:
 
 GROQ_API_KEY=your_actual_groq_api_key
 ```
+
 Step 5: Run the Application
 ```python
 uvicorn main:app --reload
@@ -184,6 +190,7 @@ Go to:
 ```python
 http://127.0.0.1:8000/docs
 ```
+
 Step 2: Upload Financial PDF (POST /analyze)
 
 Expand POST /analyze
@@ -281,11 +288,11 @@ failed
 
 7. Bonus Implementations Completed
 
-✔ Background task queue model
-✔ SQLite database integration
-✔ Output file persistence
-✔ Proper LLM provider configuration
-✔ Structured API documentation
+ Background task queue model
+ SQLite database integration
+ Output file persistence
+ Proper LLM provider configuration
+ Structured API documentation
 
 Final Outcome
 
